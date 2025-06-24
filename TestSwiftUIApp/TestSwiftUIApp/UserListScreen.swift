@@ -22,6 +22,16 @@ struct UserListScreen: View {
     ]
     
     @State private var showGrid = false
+    
+    //test
+    @State private var isAscending = true
+       
+       var sortedUsers: [User] {
+           userArray.sorted {
+               isAscending ? $0.name < $1.name : $0.name > $1.name
+           }
+       }
+    //
 
     var body: some View {
         NavigationView {
@@ -31,7 +41,7 @@ struct UserListScreen: View {
                     let columns = [GridItem(.flexible()), GridItem(.flexible())]
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
-                            ForEach(userArray) { user in
+                            ForEach(sortedUsers) { user in
                                 NavigationLink(destination: UserDetailView(user: user)) {
                                     UserCard(user: user)
                                 }
@@ -42,7 +52,7 @@ struct UserListScreen: View {
                 } else {
                     // List layout
                     List {
-                        ForEach(userArray) { user in
+                        ForEach(sortedUsers) { user in
                             NavigationLink(destination: UserDetailView(user: user)) {
                                 
                                 VStack {
@@ -57,12 +67,21 @@ struct UserListScreen: View {
             }
             .navigationTitle("Users")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isAscending.toggle()
+                    }) {
+                        Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                    }
+                    
                     Button(action: {
                         showGrid.toggle()
                     }) {
                         Text(showGrid ? "Show list"  : "Show grid")
                     }
+                   
+                    
                 }
             }
         }
