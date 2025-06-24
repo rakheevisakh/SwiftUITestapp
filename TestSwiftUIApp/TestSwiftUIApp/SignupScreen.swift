@@ -21,16 +21,17 @@ struct SignupScreen: View {
         VStack {
             Form {
                 Section(header: Text("Create Account")) {
-                    TextField("Username", text: $username)
-                        .onSubmit {
+                    TextField("Username", text: $username, onEditingChanged: { isEditing in
+                        if !isEditing {
                             validateFields()
                         }
+                    })
                     
-                    TextField("Full Name", text: $fullname)
-                        .onSubmit {
+                    TextField("Full Name", text: $fullname, onEditingChanged: { isEditing in
+                        if !isEditing {
                             validateFields()
                         }
-
+                    })
                     SecureField("Password", text: $password)
                         .onSubmit {
                             validateFields()
